@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Attack
   - Floor
+  - zone
   layers:
   - Default
   - TransparentFX

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class PlayerController : MonoBehaviour
 {
     //les inputs dans l'InputManager sont la concaténation du nom du bouton et de l'ID du joueur
@@ -80,5 +81,12 @@ public class PlayerController : MonoBehaviour
             nbJumps = nbJumpsMax;
         }
     }
-
+    private void OnTriggerExit2D(Collider2D sortie)
+    {
+        if (sortie.gameObject.tag == "zone" )
+        {
+            Debug.Log(gameObject.name + " est sorti de la zone");
+            transform.position = new Vector3(0, 0, 0);
+        }
+    }
 }
