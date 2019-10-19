@@ -22,30 +22,48 @@ public class PlayerController : MonoBehaviour
     {
         //on met la gestion du saut dans update car c'est un event buttondown
         //(car peut repasser sur false avant la prochaine fixed update)
-        if(Input.GetButtonDown("Jump" + playerID))
-        {
+        if(Input.GetButtonDown("Jump" + playerID)) {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
         }
     }
 
-    private void FixedUpdate()
-    {
-        if(Mathf.Abs(rb.velocity.x) < maxHSpeed) //vitesse max
-        {
+    private void FixedUpdate() {
+        //vitesse max
+        if(Mathf.Abs(rb.velocity.x) < maxHSpeed) {
             float dir = Input.GetAxis("Horizontal" + playerID) * acceleration * Time.deltaTime;
+
+            if(dir > 0.0f) {
+                rb.transform.eulerAngles = new Vector3(
+                    rb.transform.eulerAngles.x,
+                    -70,
+                    rb.transform.eulerAngles.z
+                );
+            }
+            else if(dir < 0.0f) {
+                rb.transform.eulerAngles = new Vector3(
+                    rb.transform.eulerAngles.x,
+                    +70,
+                    rb.transform.eulerAngles.z
+                );
+            } else {
+                rb.transform.eulerAngles = new Vector3(
+                    rb.transform.eulerAngles.x,
+                    0,
+                    rb.transform.eulerAngles.z
+                );
+            }
+
             rb.AddForce(new Vector2(dir, 0));
         }
 
-        if(Mathf.Abs(Input.GetAxis("Horizontal" + playerID)) < 0.4f) //freine le joueur si on relache la direction
-        {
+        //freine le joueur si on relache la direction
+        if(Mathf.Abs(Input.GetAxis("Horizontal" + playerID)) < 0.4f) {
             rb.AddForce(new Vector2(-rb.velocity.x * 10, 0));
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D coll)
-    {
-        if(coll.CompareTag("Attack"))
-        {
+    private void OnTriggerEnter2D(Collider2D coll) {
+        if(coll.CompareTag("Attack")) {
             //affiche dans la console Unity
             Debug.Log("Je suis " + gameObject.name + " et je me suis fait taper par " + coll.transform.root.name);
         }
