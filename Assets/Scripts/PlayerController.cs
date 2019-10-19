@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour
     public float acceleration = 1500;
     public float maxHSpeed = 5; //vitesse horizontale max en m/s
     public float jumpForce = 15; //vitesse d'impulsion du saut en m/s
-
+    public Component compt;
     private Rigidbody2D rb;
     private int nbJumps;
     private int nbJumpsMax;
@@ -77,7 +77,8 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D coll)
     {
-        if(coll.gameObject.tag == "Floor") {
+        Component oCall = coll.otherCollider;        
+        if(coll.gameObject.tag == "Floor" && oCall == compt) {
             nbJumps = nbJumpsMax;
         }
     }
