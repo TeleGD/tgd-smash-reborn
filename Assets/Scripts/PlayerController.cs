@@ -12,18 +12,23 @@ public class PlayerController : MonoBehaviour
     public float jumpForce = 15; //vitesse d'impulsion du saut en m/s
 
     private Rigidbody2D rb;
+    private int nbJumps;
+    private int nbJumpsMax;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        nbJumps = 2;
+        nbJumpsMax = 2;
     }
 
     private void Update()
     {
         //on met la gestion du saut dans update car c'est un event buttondown
         //(car peut repasser sur false avant la prochaine fixed update)
-        if(Input.GetButtonDown("Jump" + playerID)) {
+        if(Input.GetButtonDown("Jump" + playerID) && nbJumps > 0) {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            nbJumps -= 1;
         }
     }
 
@@ -68,4 +73,12 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Je suis " + gameObject.name + " et je me suis fait taper par " + coll.transform.root.name);
         }
     }
+
+    private void OnCollisionEnter2D(Collision2D coll)
+    {
+        if(coll.gameObject.tag == "Floor") {
+            nbJumps = nbJumpsMax;
+        }
+    }
+
 }
