@@ -25,11 +25,14 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        GameMaster.AddPlayer(this);
         rb = GetComponent<Rigidbody2D>();
         nbJumps = 2;
         nbJumpsMax = 2;
         runRatio = 2.5f;
-        nbmort = 50;
+        nbmort = 5;
+        TMPro.TextMeshProUGUI textmesh = textMeshPro.GetComponent<TMPro.TextMeshProUGUI>();
+        textmesh.SetText("Player " + playerID + " : " + nbmort);
     }
 
     private void Update()
@@ -117,20 +120,27 @@ public class PlayerController : MonoBehaviour
     private void OnTriggerExit2D(Collider2D coll)
     {
 
+        // Fin de l'attaque : on sort du trigger de détection de coups
         if (coll.CompareTag("Attack"))
         {
             attackedPlayer = null;
         }
 
+        // Sortie de la zone : elle est représentée par un rectangle comprenant toute la zone.
+        // La sortie du trigger correspond à une sortie de la zone.
         if (coll.gameObject.tag == "zone")
         {
             Debug.Log(gameObject.name + " est sorti de la zone");
             transform.position = new Vector3(0, 0, 0);
-            nbmort = nbmort - 1;
+            nbmort = nbmort>0 ? nbmort-1 : nbmort;
             Debug.Log(nbmort);
             TMPro.TextMeshProUGUI textmesh = textMeshPro.GetComponent<TMPro.TextMeshProUGUI>();
             textmesh.SetText("Player " + playerID + " : " + nbmort);
 
+            if (nbmort==0) {
+                GameMaster.KillPlayer(this);
+                Destroy(gameObject);
+            }
         }
 
     }
@@ -157,5 +167,9 @@ public class PlayerController : MonoBehaviour
             // Bouge l'autre joueur
             otherPlayerController.rb.AddForce(movement * 6000f);
         }
+    }
+
+    public int GetID() {
+        return playerID;
     }
 }
