@@ -6,7 +6,7 @@ public class Test : MonoBehaviour
 {
 
     public void ButtonClick() {
-        Debug.Log("COUCOU")
+        Debug.Log("COUCOU");
     }
 
 }
