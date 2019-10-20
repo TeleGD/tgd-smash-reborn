@@ -18,8 +18,12 @@ public class MainMenu : MonoBehaviour
         
     }
 
-    public void startGame() {
+    public void startGameArena1() {
         SceneManager.LoadScene("Arene 1");
+    }
+
+    public void startGameArena2() {
+        SceneManager.LoadScene("Arene 2");
     }
 
     public void doExitGame() {
