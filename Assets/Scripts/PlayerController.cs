@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+<<<<<<< HEAD
 	//les inputs dans l'InputManager sont la concaténation du nom du bouton et de l'ID du joueur
 	public byte playerID = 1;
 
@@ -26,7 +27,7 @@ public class PlayerController : MonoBehaviour
 		rb = GetComponent<Rigidbody2D>();
 		nbJumps = 2;
 		nbJumpsMax = 2;
-		runRatio = 4f;
+		runRatio = 2.5f;
 	}
 
 	private void Update()
