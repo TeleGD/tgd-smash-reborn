@@ -16,6 +16,8 @@ public class PlayerController : MonoBehaviour
     private int nbJumps;
     private int nbJumpsMax;
     private float runRatio;
+    private int nbmort;
+    public GameObject textMeshPro;
 
     private void Start()
     {
@@ -23,6 +25,7 @@ public class PlayerController : MonoBehaviour
         nbJumps = 2;
         nbJumpsMax = 2;
         runRatio = 4f;
+        nbmort = 50;
     }
 
     private void Update()
@@ -93,6 +96,11 @@ public class PlayerController : MonoBehaviour
         if (sortie.gameObject.tag == "zone" ) {
             Debug.Log(gameObject.name + " est sorti de la zone");
             transform.position = new Vector3(0, 0, 0);
+            nbmort = nbmort - 1;
+            Debug.Log(nbmort);
+            TMPro.TextMeshProUGUI textmesh = textMeshPro.GetComponent<TMPro.TextMeshProUGUI>();
+            textmesh.SetText("Player " + playerID + " : " + nbmort);
+
         }
     }
 }
