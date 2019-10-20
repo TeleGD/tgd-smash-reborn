@@ -15,12 +15,14 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
     private int nbJumps;
     private int nbJumpsMax;
+    private float runRatio;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         nbJumps = 2;
         nbJumpsMax = 2;
+        runRatio = 4f;
     }
 
     private void Update()
@@ -35,8 +37,12 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate() {
         //vitesse max
-        if(Mathf.Abs(rb.velocity.x) < maxHSpeed) {
-            float dir = Input.GetAxis("Horizontal" + playerID) * acceleration * Time.deltaTime;
+        float ratio = 1f;
+        if(Input.GetAxis("Sprint" + playerID) == 1) {
+            ratio = runRatio;
+        }
+        if(Mathf.Abs(rb.velocity.x) < maxHSpeed * ratio) {
+            float dir = ratio * Input.GetAxis("Horizontal" + playerID) * acceleration * Time.deltaTime;         
 
             if(dir > 0.0f) {
                 rb.transform.eulerAngles = new Vector3(
@@ -84,8 +90,7 @@ public class PlayerController : MonoBehaviour
     }
     private void OnTriggerExit2D(Collider2D sortie)
     {
-        if (sortie.gameObject.tag == "zone" )
-        {
+        if (sortie.gameObject.tag == "zone" ) {
             Debug.Log(gameObject.name + " est sorti de la zone");
             transform.position = new Vector3(0, 0, 0);
         }
