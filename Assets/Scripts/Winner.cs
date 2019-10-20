@@ -9,7 +9,12 @@ public class Winner : MonoBehaviour
 
     void Start() {
         textMeshPro = GetComponent<TextMeshProUGUI>();
-        textMeshPro.text = "Player "+GameMaster.GetPlayerID()+" won!";
+        if (GameMaster.GetPlayerID()==-1) {
+            textMeshPro.text = "TeleGame Design won!";
+        } else {
+            textMeshPro.text = "Player "+ GameMaster.GetPlayerID() +" won!";
+        }
+    
     }
 
 }
