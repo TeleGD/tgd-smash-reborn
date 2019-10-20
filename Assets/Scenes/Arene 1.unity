@@ -364,8 +364,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 357, y: 271}
-  m_SizeDelta: {x: 250, y: 50}
+  m_AnchoredPosition: {x: 555, y: 270}
+  m_SizeDelta: {x: 160, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &384575929
 MonoBehaviour:
@@ -385,7 +385,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Player 2 : 50'
+  m_text: 'Player 2 :'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -451,13 +451,13 @@ MonoBehaviour:
   m_firstVisibleCharacter: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 0, z: -1.9475414, w: 0}
   m_textInfo:
     textComponent: {fileID: 384575929}
-    characterCount: 13
+    characterCount: 10
     spriteCount: 0
-    spaceCount: 3
-    wordCount: 3
+    spaceCount: 2
+    wordCount: 2
     linkCount: 0
     lineCount: 1
     pageCount: 1
@@ -1063,7 +1063,7 @@ GameObject:
   - component: {fileID: 1525244851}
   m_Layer: 5
   m_Name: Canvas
-  m_TagString: Untagged
+  m_TagString: canvas
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1224,16 +1224,26 @@ PrefabInstance:
       propertyPath: textMeshPro
       value: 
       objectReference: {fileID: 384575927}
-    - target: {fileID: 3926606097072611500, guid: 4b79ac1e81b5faf44a47e71b536bbc90,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
+    - target: {fileID: 1712897944, guid: 4b79ac1e81b5faf44a47e71b536bbc90, type: 3}
+      propertyPath: heart
       value: 
-      objectReference: {fileID: 2100000, guid: 24705125821b3124eb67b5dcc66bd3de, type: 2}
+      objectReference: {fileID: 9199024032093624742, guid: 38ee72bc792a09b458c0b60b2c3d0660,
+        type: 3}
+    - target: {fileID: 1712897944, guid: 4b79ac1e81b5faf44a47e71b536bbc90, type: 3}
+      propertyPath: heartPrefab
+      value: 
+      objectReference: {fileID: 9199024032093624742, guid: 38ee72bc792a09b458c0b60b2c3d0660,
+        type: 3}
     - target: {fileID: 6812386801741893691, guid: 4b79ac1e81b5faf44a47e71b536bbc90,
         type: 3}
       propertyPath: m_IsTrigger
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3926606097072611500, guid: 4b79ac1e81b5faf44a47e71b536bbc90,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 24705125821b3124eb67b5dcc66bd3de, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4b79ac1e81b5faf44a47e71b536bbc90, type: 3}
 --- !u!1 &1772580192
@@ -1270,8 +1280,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -317, y: 268}
-  m_SizeDelta: {x: 250, y: 50}
+  m_AnchoredPosition: {x: -555, y: 270}
+  m_SizeDelta: {x: 160, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1772580194
 MonoBehaviour:
@@ -1291,7 +1301,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Player 1 : 50'
+  m_text: 'Player 1 :'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1360,10 +1370,10 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 1772580194}
-    characterCount: 13
+    characterCount: 10
     spriteCount: 0
-    spaceCount: 3
-    wordCount: 3
+    spaceCount: 2
+    wordCount: 2
     linkCount: 0
     lineCount: 1
     pageCount: 1
@@ -1467,15 +1477,25 @@ PrefabInstance:
       propertyPath: textMeshPro
       value: 
       objectReference: {fileID: 1772580192}
-    - target: {fileID: 3926606097072611500, guid: 4b79ac1e81b5faf44a47e71b536bbc90,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
+    - target: {fileID: 1712897944, guid: 4b79ac1e81b5faf44a47e71b536bbc90, type: 3}
+      propertyPath: heart
       value: 
-      objectReference: {fileID: 2100000, guid: f1a81cef3a9f05f4bbfbbab9fe2609f8, type: 2}
+      objectReference: {fileID: 9199024032093624742, guid: 38ee72bc792a09b458c0b60b2c3d0660,
+        type: 3}
+    - target: {fileID: 1712897944, guid: 4b79ac1e81b5faf44a47e71b536bbc90, type: 3}
+      propertyPath: heartPrefab
+      value: 
+      objectReference: {fileID: 9199024032093624742, guid: 38ee72bc792a09b458c0b60b2c3d0660,
+        type: 3}
     - target: {fileID: 6812386801741893691, guid: 4b79ac1e81b5faf44a47e71b536bbc90,
         type: 3}
       propertyPath: m_IsTrigger
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3926606097072611500, guid: 4b79ac1e81b5faf44a47e71b536bbc90,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: f1a81cef3a9f05f4bbfbbab9fe2609f8, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4b79ac1e81b5faf44a47e71b536bbc90, type: 3}

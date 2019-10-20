@@ -28,8 +28,9 @@ public class PlayerController : MonoBehaviour
 
 	// This est attaqué par ce joueur
 	private GameObject attackedPlayer;
-	private int nbmort;
+	private int lives;
     public GameObject textMeshPro;
+	public GameObject heartPrefab;
 
     private void Start()
 	{
@@ -39,10 +40,32 @@ public class PlayerController : MonoBehaviour
 		nbJumpsMax = 2;
 		runRatio = 2.5f;
         animator = model.GetComponent<Animator>();
-        nbmort = 5;
-        TMPro.TextMeshProUGUI textmesh = textMeshPro.GetComponent<TMPro.TextMeshProUGUI>();
-        textmesh.SetText("Player " + playerID + " : " + nbmort);
-    }
+        lives = 5;
+
+		TMPro.TextMeshProUGUI textmesh = textMeshPro.GetComponent<TMPro.TextMeshProUGUI>();
+		textmesh.SetText("Player " + playerID + " : ");
+
+		// affichage des vies
+		float gap = 15f;
+
+		// Pour le joueur 2 on met les coeurs de droite à gauche et inversement pour le joueur 1
+		float sens = Mathf.Pow(-1, (int)playerID);
+
+		float nextXPosition = textmesh.rectTransform.anchoredPosition.x + sens * (textmesh.rectTransform.rect.width / 2 - gap);
+		float yPosition = textmesh.rectTransform.anchoredPosition.y - (textmesh.rectTransform.rect.height);
+
+		RectTransform rt = (RectTransform)heartPrefab.transform;
+
+		for (int i = 0; i < lives; i++)
+		{
+			GameObject heart = Instantiate(heartPrefab, new Vector3(nextXPosition, yPosition, 0), Quaternion.identity) as GameObject;
+			heart.transform.SetParent(GameObject.FindGameObjectWithTag("canvas").transform, false);
+			heart.tag = "heartsPlayer" + playerID;
+			nextXPosition = nextXPosition - sens * (rt.rect.width - gap);
+		}
+
+
+	}
 
     private void Update()
 	{
@@ -201,12 +224,11 @@ public class PlayerController : MonoBehaviour
             Debug.Log(gameObject.name + " est sorti de la zone");
             transform.position = new Vector3(0, 0, 0);
 			rb.velocity = new Vector3(0, 0, 0);
-            nbmort = nbmort>0 ? nbmort-1 : nbmort;
-            Debug.Log(nbmort);
-            TMPro.TextMeshProUGUI textmesh = textMeshPro.GetComponent<TMPro.TextMeshProUGUI>();
-            textmesh.SetText("Player " + playerID + " : " + nbmort);
+			lives = lives>0 ? lives-1 : lives;
+			DisplayPLayersLives();
 
-            if (nbmort==0) {
+
+			if (lives==0) {
                 GameMaster.KillPlayer(this);
                 Destroy(gameObject);
             }
@@ -221,5 +243,37 @@ public class PlayerController : MonoBehaviour
 	public void setPunched(bool punched)
 	{
 		this.punched = punched;
+	}
+
+	private void DisplayPLayersLives()
+	{
+
+		TMPro.TextMeshProUGUI textmesh = textMeshPro.GetComponent<TMPro.TextMeshProUGUI>();
+
+		// Destroy all instances of heartPrefab
+		var hearts = GameObject.FindGameObjectsWithTag("heartsPlayer"+playerID);
+
+		foreach (GameObject heart in hearts)
+		{
+			Destroy(heart);
+		}
+		// affichage des vies
+		float gap = 15f;
+
+		// Pour le joueur 2 on met les coeurs de droite à gauche et inversement pour le joueur 1
+		float sens = Mathf.Pow(-1, (int)playerID);
+
+		float nextXPosition = textmesh.rectTransform.anchoredPosition.x + sens * (textmesh.rectTransform.rect.width / 2 - gap);
+		float yPosition = textmesh.rectTransform.anchoredPosition.y - (textmesh.rectTransform.rect.height);
+
+		RectTransform rt = (RectTransform)heartPrefab.transform;
+
+		for (int i = 0; i < lives; i++)
+		{
+			GameObject heart = Instantiate(heartPrefab, new Vector3(nextXPosition, yPosition, 0), Quaternion.identity) as GameObject;
+			heart.transform.SetParent(GameObject.FindGameObjectWithTag("canvas").transform, false);
+			heart.tag = "heartsPlayer" + playerID;
+			nextXPosition = nextXPosition - sens * (rt.rect.width - gap);
+		}
 	}
 }
