@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class PlayerController : MonoBehaviour
 {
 	//les inputs dans l'InputManager sont la concaténation du nom du bouton et de l'ID du joueur
@@ -11,14 +12,21 @@ public class PlayerController : MonoBehaviour
 	public float maxHSpeed = 5; //vitesse horizontale max en m/s
 	public float jumpForce = 15; //vitesse d'impulsion du saut en m/s
 
+	public Component compt;
+	private Rigidbody2D rb;
+	private int nbJumps;
+	private int nbJumpsMax;
+	private float runRatio;
+
 	// Player attaqué par ce joueur
 	private GameObject attackedPlayer;
-
-	private Rigidbody2D rb;
 
 	private void Start()
 	{
 		rb = GetComponent<Rigidbody2D>();
+		nbJumps = 2;
+		nbJumpsMax = 2;
+		runRatio = 4f;
 	}
 
 	private void Update()
@@ -28,6 +36,7 @@ public class PlayerController : MonoBehaviour
 		if (Input.GetButtonDown("Jump" + playerID))
 		{
 			rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+			nbJumps -= 1;
 		}
 
 		// Si le bouton d'attaque est pressé
@@ -40,9 +49,15 @@ public class PlayerController : MonoBehaviour
 	private void FixedUpdate()
 	{
 		//vitesse max
-		if (Mathf.Abs(rb.velocity.x) < maxHSpeed)
+		float ratio = 1f;
+		if (Input.GetAxis("Sprint" + playerID) == 1)
 		{
-			float dir = Input.GetAxis("Horizontal" + playerID) * acceleration * Time.deltaTime;
+			ratio = runRatio;
+		}
+
+		if (Mathf.Abs(rb.velocity.x) < maxHSpeed * ratio)
+		{
+			float dir = ratio * Input.GetAxis("Horizontal" + playerID) * acceleration * Time.deltaTime;
 
 			if (dir > 0.0f)
 			{
@@ -79,6 +94,15 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
+	private void OnCollisionEnter2D(Collision2D coll)
+	{
+		Component oCall = coll.otherCollider;
+		if (coll.gameObject.tag == "Floor" && oCall == compt)
+		{
+			nbJumps = nbJumpsMax;
+		}
+	}
+
 	private void OnTriggerStay2D(Collider2D coll)
 	{
 		// Si le collider est un collider d'attaque, donc le bras de l'adversaire
@@ -97,6 +121,12 @@ public class PlayerController : MonoBehaviour
 			attackedPlayer = null;
 		}
 
+		if (coll.gameObject.tag == "zone")
+		{
+			Debug.Log(gameObject.name + " est sorti de la zone");
+			transform.position = new Vector3(0, 0, 0);
+		}
+
 	}
 
 	// Attack another player
@@ -108,10 +138,17 @@ public class PlayerController : MonoBehaviour
 
 			// On calcule où se situe le joueur par rapport à l'autre
 			float playersPositionDiff = gameObject.transform.position.x - otherPlayerController.transform.position.x;
-			Vector3 movement = new Vector3(-playersPositionDiff, 0.0f, 0);
+			float xDirection;
+			if (playersPositionDiff < 0)
+				xDirection = -1;
+			else if (playersPositionDiff > 0)
+				xDirection = 1;
+			else
+				xDirection = 0;
+			Vector3 movement = new Vector3(-xDirection, 0.0f, 0);
 
 			// Bouge l'autre joueur
-			otherPlayerController.rb.AddForce(movement * 2000f);
+			otherPlayerController.rb.AddForce(movement * 6000f);
 		}
 	}
 }
