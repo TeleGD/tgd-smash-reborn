@@ -1611,7 +1611,7 @@ GameObject:
   - component: {fileID: 8906838764436939426}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1697,6 +1697,7 @@ MonoBehaviour:
   maxHSpeed: 5
   jumpForce: 12
   compt: {fileID: 8906838764436939426}
+  textMeshPro: {fileID: 0}
 --- !u!61 &8906838764436939426
 BoxCollider2D:
   m_ObjectHideFlags: 0
