@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         nbJumps = 2;
         nbJumpsMax = 2;
-        runRatio = 4f;
+        runRatio = 2.5f;
     }
 
     private void Update()
