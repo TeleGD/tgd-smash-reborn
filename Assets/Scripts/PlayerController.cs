@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour
 	{
 		//on met la gestion du saut dans update car c'est un event buttondown
 		//(car peut repasser sur false avant la prochaine fixed update)
-		if (Input.GetButtonDown("Jump" + playerID))
+		if (Input.GetButtonDown("Jump" + playerID) && nbJumps > 0)
 		{
 			rb.velocity = new Vector2(rb.velocity.x, jumpForce);
 			nbJumps -= 1;
