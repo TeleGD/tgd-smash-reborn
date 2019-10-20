@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-<<<<<<< HEAD
 	//les inputs dans l'InputManager sont la concaténation du nom du bouton et de l'ID du joueur
 	public byte playerID = 1;
 
@@ -18,6 +17,8 @@ public class PlayerController : MonoBehaviour
 	private int nbJumps;
 	private int nbJumpsMax;
 	private float runRatio;
+
+	private int canAttack = 0;
 
 	// Player attaqué par ce joueur
 	private GameObject attackedPlayer;
@@ -41,10 +42,13 @@ public class PlayerController : MonoBehaviour
 		}
 
 		// Si le bouton d'attaque est pressé
-		if (Input.GetButtonDown("Attack"+ playerID))
+		if (Input.GetButtonDown("Attack"+ playerID) && canAttack == 0)
 		{
 			Attack();
+			canAttack = 3;
 		}
+		if (canAttack > 0)
+			canAttack--;
 	}
 
 	private void FixedUpdate()
@@ -126,6 +130,7 @@ public class PlayerController : MonoBehaviour
 		{
 			Debug.Log(gameObject.name + " est sorti de la zone");
 			transform.position = new Vector3(0, 0, 0);
+			rb.velocity = new Vector3(0, 0, 0);
 		}
 
 	}
@@ -137,19 +142,31 @@ public class PlayerController : MonoBehaviour
 		{
 			PlayerController otherPlayerController = attackedPlayer.GetComponent<PlayerController>();
 
+			float punchForce = 10f;
+
+			float playerVel = Mathf.Abs(rb.velocity.x)*15;
+
+
 			// On calcule où se situe le joueur par rapport à l'autre
-			float playersPositionDiff = gameObject.transform.position.x - otherPlayerController.transform.position.x;
+			float playersPositionDiff = transform.position.x - otherPlayerController.transform.position.x;
+
+
 			float xDirection;
-			if (playersPositionDiff < 0)
+			// l'autre joueur est à droite du joueur
+			if (playersPositionDiff > 0)
+			{
 				xDirection = -1;
-			else if (playersPositionDiff > 0)
+			}
+
+			else if (playersPositionDiff < 0)
 				xDirection = 1;
 			else
 				xDirection = 0;
-			Vector3 movement = new Vector3(-xDirection, 0.0f, 0);
 
-			// Bouge l'autre joueur
-			otherPlayerController.rb.AddForce(movement * 6000f);
+			Vector3 movement = new Vector3(xDirection, 0.0f, 0);
+
+			otherPlayerController.rb.AddForce(new Vector3(xDirection * (playerVel + punchForce), 0f, 0f), ForceMode2D.Impulse);
+
 		}
 	}
 }
