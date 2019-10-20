@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+
 	//les inputs dans l'InputManager sont la concaténation du nom du bouton et de l'ID du joueur
 	public byte playerID = 1;
 
@@ -24,15 +25,20 @@ public class PlayerController : MonoBehaviour
 
 	// Player attaqué par ce joueur
 	private GameObject attackedPlayer;
+    private int nbmort;
+    public GameObject textMeshPro;
 
-	private void Start()
+    private void Start()
 	{
-		rb = GetComponent<Rigidbody2D>();
+        GameMaster.AddPlayer(this);
+        rb = GetComponent<Rigidbody2D>();
 		nbJumps = 2;
 		nbJumpsMax = 2;
 		runRatio = 2.5f;
         animator = model.GetComponent<Animator>();
-        
+        nbmort = 5;
+        TMPro.TextMeshProUGUI textmesh = textMeshPro.GetComponent<TMPro.TextMeshProUGUI>();
+        textmesh.SetText("Player " + playerID + " : " + nbmort);
     }
 
     private void Update()
@@ -67,7 +73,6 @@ public class PlayerController : MonoBehaviour
             }
             punchingFrame++;
         }
-        print(punchingFrame);
     }
 
 	private void FixedUpdate()
@@ -118,16 +123,16 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
-	private void OnCollisionEnter2D(Collision2D coll)
-	{
-		Component oCall = coll.otherCollider;
-		if (coll.gameObject.tag == "Floor" && oCall == compt)
-		{
-			nbJumps = nbJumpsMax;
-		}
-	}
+    private void OnCollisionEnter2D(Collision2D coll)
+    {
+        Component oCall = coll.otherCollider;
+        if ((coll.gameObject.tag == "Floor" || coll.gameObject.tag == "Player") && oCall == compt)
+        {
+            nbJumps = nbJumpsMax;
+        }
+    }
 
-	private void OnTriggerStay2D(Collider2D coll)
+    private void OnTriggerStay2D(Collider2D coll)
 	{
 		// Si le collider est un collider d'attaque, donc le bras de l'adversaire
 		if (coll.CompareTag("Attack"))
@@ -136,31 +141,12 @@ public class PlayerController : MonoBehaviour
 			attackedPlayer = coll.transform.root.gameObject;
 		}
 	}
-
-	private void OnTriggerExit2D(Collider2D coll)
-	{
-
-		if (coll.CompareTag("Attack"))
-		{
-			attackedPlayer = null;
-		}
-
-		if (coll.gameObject.tag == "zone")
-		{
-			Debug.Log(gameObject.name + " est sorti de la zone");
-			transform.position = new Vector3(0, 0, 0);
-		}
-
-	}
-
 	// Attack another player
 	private void Attack()
 	{
 		if (attackedPlayer != null)
 		{
 			PlayerController otherPlayerController = attackedPlayer.GetComponent<PlayerController>();
-            
-            
 
 			// On calcule où se situe le joueur par rapport à l'autre
 			float playersPositionDiff = gameObject.transform.position.x - otherPlayerController.transform.position.x;
@@ -177,4 +163,35 @@ public class PlayerController : MonoBehaviour
 			otherPlayerController.rb.AddForce(movement * 6000f);
 		}
 	}
+
+    private void OnTriggerExit2D(Collider2D coll)
+    {
+
+        // Fin de l'attaque : on sort du trigger de détection de coups
+        if (coll.CompareTag("Attack"))
+        {
+            attackedPlayer = null;
+        }
+
+        // Sortie de la zone : elle est représentée par un rectangle comprenant toute la zone.
+        // La sortie du trigger correspond à une sortie de la zone.
+        if (coll.gameObject.tag == "zone")
+        {
+            Debug.Log(gameObject.name + " est sorti de la zone");
+            transform.position = new Vector3(0, 0, 0);
+            nbmort = nbmort>0 ? nbmort-1 : nbmort;
+            Debug.Log(nbmort);
+            TMPro.TextMeshProUGUI textmesh = textMeshPro.GetComponent<TMPro.TextMeshProUGUI>();
+            textmesh.SetText("Player " + playerID + " : " + nbmort);
+
+            if (nbmort==0) {
+                GameMaster.KillPlayer(this);
+                Destroy(gameObject);
+            }
+        }
+
+    }
+    public int GetID() {
+        return playerID;
+    }
 }
