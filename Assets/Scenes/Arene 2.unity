@@ -1186,7 +1186,7 @@ PrefabInstance:
     - target: {fileID: 1712897944, guid: 4b79ac1e81b5faf44a47e71b536bbc90, type: 3}
       propertyPath: textMeshPro
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1775391579}
     - target: {fileID: 3926606097072611500, guid: 4b79ac1e81b5faf44a47e71b536bbc90,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -1529,7 +1529,7 @@ PrefabInstance:
     - target: {fileID: 1712897944, guid: 4b79ac1e81b5faf44a47e71b536bbc90, type: 3}
       propertyPath: textMeshPro
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1301448010}
     - target: {fileID: 3926606097072611500, guid: 4b79ac1e81b5faf44a47e71b536bbc90,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
