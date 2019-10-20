@@ -19,15 +19,18 @@ public class PlayerController : MonoBehaviour
 	private int nbJumpsMax;
 	private float runRatio;
 
-
+	// est en train de se faire tapper (ou d'en sentir les conséquences)
 	private bool punched;
 
     private Animator animator;
     public GameObject model; //c'est le GameObject "Model" du perso
     private int punchingFrame=0;
+	private int beeingPunchFrame = 0;
 
-	// This est attaqué par ce joueur
-	private GameObject attackedPlayer;
+	// Joueur a porté d'attaque
+	private GameObject closePlayer;
+	// Le dernier attaquant dont on subit encore l'attaque
+	private GameObject attacker;
 	private int lives;
     public GameObject textMeshPro;
 	public GameObject heartPrefab;
@@ -88,6 +91,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+		// Gestion de l'animation de notre attaque
         if (animator.GetBool("punching"))
         {
 
@@ -95,18 +99,24 @@ public class PlayerController : MonoBehaviour
             {
                 animator.SetBool("punching", false);
                 punchingFrame = -1;
-                
-            }
-			if(punchingFrame == 15  && attackedPlayer != null)
-			{
-				PlayerController otherPlayerController = attackedPlayer.GetComponent<PlayerController>();
-				otherPlayerController.setPunched(false);
-				attackedPlayer = null;
+
 			}
 				
             punchingFrame++;
         }
-    }
+
+		// Si on nous attaque
+		if (punched)
+		{
+			if(beeingPunchFrame > 15)
+			{
+				attacker = null;
+				punched = false;
+				beeingPunchFrame = -1;
+			}
+			beeingPunchFrame++;
+		}
+	}
 
 	private void FixedUpdate()
 	{
@@ -170,20 +180,20 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D coll)
 	{
-		// Si le collider est un collider d'attaque, donc le bras de l'adversaire
+		// Si le collider est un collider d'attaque (le bras de l'adversaire)
 		if (coll.CompareTag("Attack"))
 		{
-			// On récupère le joueur attaqué
-			attackedPlayer = coll.transform.root.gameObject;
+			// On récupère le joueur proche
+			closePlayer = coll.transform.root.gameObject;
 		}
 	}
 
 	// Attack another player
 	private void Attack()
 	{
-		if (attackedPlayer != null)
+		if (closePlayer != null)
 		{
-			PlayerController otherPlayerController = attackedPlayer.GetComponent<PlayerController>();
+			PlayerController otherPlayerController = closePlayer.GetComponent<PlayerController>();
 			otherPlayerController.setPunched(true);
 
 			// force du coup ne dépendant pas de la vitesse
@@ -217,9 +227,13 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D coll)
     {
-        // Sortie de la zone : elle est représentée par un rectangle comprenant toute la zone.
-        // La sortie du trigger correspond à une sortie de la zone.
-        if (coll.gameObject.tag == "zone")
+		if (coll.CompareTag("Attack"))
+		{
+			closePlayer = null;
+		}
+		// Sortie de la zone : elle est représentée par un rectangle comprenant toute la zone.
+		// La sortie du trigger correspond à une sortie de la zone.
+		if (coll.gameObject.tag == "zone")
         {
             Debug.Log(gameObject.name + " est sorti de la zone");
             transform.position = new Vector3(0, 0, 0);
