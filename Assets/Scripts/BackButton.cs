@@ -15,6 +15,7 @@ public class BackButton : MonoBehaviour
     }
 
     public void ButtonClick() {
+        GameMaster.ClearPlayers();
         SceneManager.LoadScene("Main Menu");
     }
 

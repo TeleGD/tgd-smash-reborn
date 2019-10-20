@@ -1,0 +1,6 @@
+- Adrien Cabon (@AdrienCabon)
+- Alexis Dieu (@Alexis816)
+- Amos George (@AmosGeorge)
+- Christopher Schirlé (@ChristopherSchirle)
+- Stéphane Hulot (@stephane-hulot)
+- Timothée Wright (@TimotheeWright)
