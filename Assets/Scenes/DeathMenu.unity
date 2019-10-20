@@ -204,6 +204,7 @@ GameObject:
   - component: {fileID: 247756456}
   - component: {fileID: 247756458}
   - component: {fileID: 247756457}
+  - component: {fileID: 247756459}
   m_Layer: 5
   m_Name: player_dead
   m_TagString: Untagged
@@ -350,6 +351,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 247756455}
   m_CullTransparentMesh: 0
+--- !u!114 &247756459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 247756455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a2ad096c70f6b1449d62cbcae825a8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &646050157
 GameObject:
   m_ObjectHideFlags: 0
@@ -846,11 +859,11 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1158500239}
-        m_MethodName: 
+        m_MethodName: ButtonClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -901,7 +914,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1158500234}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: edfd8eb427e07ba44a52948c503f9cff, type: 3}
+  m_Script: {fileID: 11500000, guid: 8717ec3c07ab0ec44bf4f33ad4c0e6d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1878462123
