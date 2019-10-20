@@ -1697,6 +1697,7 @@ MonoBehaviour:
   maxHSpeed: 5
   jumpForce: 12
   compt: {fileID: 8906838764436939426}
+  model: {fileID: 1908728486771002303}
 --- !u!61 &8906838764436939426
 BoxCollider2D:
   m_ObjectHideFlags: 0

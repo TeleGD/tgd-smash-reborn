@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-<<<<<<< HEAD
 	//les inputs dans l'InputManager sont la concaténation du nom du bouton et de l'ID du joueur
 	public byte playerID = 1;
 
@@ -19,6 +18,10 @@ public class PlayerController : MonoBehaviour
 	private int nbJumpsMax;
 	private float runRatio;
 
+    private Animator animator;
+    public GameObject model; //c'est le GameObject "Model" du perso
+    private int punchingFrame=0;
+
 	// Player attaqué par ce joueur
 	private GameObject attackedPlayer;
 
@@ -28,9 +31,11 @@ public class PlayerController : MonoBehaviour
 		nbJumps = 2;
 		nbJumpsMax = 2;
 		runRatio = 2.5f;
-	}
+        animator = model.GetComponent<Animator>();
+        
+    }
 
-	private void Update()
+    private void Update()
 	{
 		//on met la gestion du saut dans update car c'est un event buttondown
 		//(car peut repasser sur false avant la prochaine fixed update)
@@ -43,9 +48,27 @@ public class PlayerController : MonoBehaviour
 		// Si le bouton d'attaque est pressé
 		if (Input.GetButtonDown("Attack"+ playerID))
 		{
-			Attack();
-		}
-	}
+            if (!animator.GetBool("punching"))
+            {
+                animator.SetBool("punching", true);
+                Attack();
+                
+            }
+        }
+
+        if (animator.GetBool("punching"))
+        {
+
+            if (punchingFrame == 30)
+            {
+                animator.SetBool("punching", false);
+                punchingFrame = -1;
+                
+            }
+            punchingFrame++;
+        }
+        print(punchingFrame);
+    }
 
 	private void FixedUpdate()
 	{
@@ -62,26 +85,26 @@ public class PlayerController : MonoBehaviour
 
 			if (dir > 0.0f)
 			{
-				rb.transform.eulerAngles = new Vector3(
-					rb.transform.eulerAngles.x,
+				model.transform.eulerAngles = new Vector3(
+					model.transform.eulerAngles.x,
 					-70,
-					rb.transform.eulerAngles.z
+					model.transform.eulerAngles.z
 				);
 			}
 			else if (dir < 0.0f)
 			{
-				rb.transform.eulerAngles = new Vector3(
-					rb.transform.eulerAngles.x,
+				model.transform.eulerAngles = new Vector3(
+					model.transform.eulerAngles.x,
 					+70,
-					rb.transform.eulerAngles.z
+					model.transform.eulerAngles.z
 				);
 			}
 			else
 			{
-				rb.transform.eulerAngles = new Vector3(
-					rb.transform.eulerAngles.x,
+				model.transform.eulerAngles = new Vector3(
+					model.transform.eulerAngles.x,
 					0,
-					rb.transform.eulerAngles.z
+					model.transform.eulerAngles.z
 				);
 			}
 
@@ -136,6 +159,8 @@ public class PlayerController : MonoBehaviour
 		if (attackedPlayer != null)
 		{
 			PlayerController otherPlayerController = attackedPlayer.GetComponent<PlayerController>();
+            
+            
 
 			// On calcule où se situe le joueur par rapport à l'autre
 			float playersPositionDiff = gameObject.transform.position.x - otherPlayerController.transform.position.x;
