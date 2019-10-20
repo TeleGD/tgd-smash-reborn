@@ -130,6 +130,10 @@ public class PlayerController : MonoBehaviour
 		{
 			rb.AddForce(new Vector2(-rb.velocity.x * 10, 0));
 		}
+		if ((punched))
+		{
+			rb.AddForce(new Vector2(0, -rb.velocity.y * 70));
+		}
 	}
 
     private void OnCollisionEnter2D(Collision2D coll)
@@ -160,10 +164,10 @@ public class PlayerController : MonoBehaviour
 			otherPlayerController.setPunched(true);
 
 			// force du coup ne dépendant pas de la vitesse
-			float punchForce = 30f;
+			float punchForce = 25f;
 
-			// 17 est un coefficient permettant d'accentuer l'importance de la vélocité dans le calcul de la force du coup
-			float playerVel = Mathf.Abs(rb.velocity.x) * 17;
+			// 13 est un coefficient permettant d'accentuer l'importance de la vélocité dans le calcul de la force du coup
+			float playerVel = Mathf.Abs(rb.velocity.x) * 13;
 
 
 			// On calcule où se situe le joueur par rapport à l'autre
@@ -183,7 +187,7 @@ public class PlayerController : MonoBehaviour
 				xDirection = 0;
 
 			//Vector3 movement = new Vector3(xDirection, 0.0f, 0);
-			otherPlayerController.rb.AddForce(new Vector3(xDirection * (playerVel + punchForce), 0f,0f),ForceMode2D.Impulse);
+			otherPlayerController.rb.AddForce(new Vector3(xDirection * (playerVel + punchForce), (playerVel + punchForce), 0f),ForceMode2D.Impulse);
 
 		}
 	}
