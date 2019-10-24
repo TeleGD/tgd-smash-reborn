@@ -12,8 +12,7 @@ public class PlayerController : MonoBehaviour
 	public float acceleration = 1500;
 	public float maxHSpeed = 5; //vitesse horizontale max en m/s
 	public float jumpForce = 15; //vitesse d'impulsion du saut en m/s
-
-	public Component compt;
+    
 	private Rigidbody2D rb;
 	private int nbJumps;
 	private int nbJumpsMax;
@@ -35,6 +34,8 @@ public class PlayerController : MonoBehaviour
     public GameObject textMeshPro;
 	public GameObject heartPrefab;
 
+    private float lastExitTime; //temps a la derniere sortie de la zone
+
     private void Start()
 	{
         GameMaster.AddPlayer(this);
@@ -44,30 +45,6 @@ public class PlayerController : MonoBehaviour
 		runRatio = 2.5f;
         animator = model.GetComponent<Animator>();
         lives = 5;
-
-		TMPro.TextMeshProUGUI textmesh = textMeshPro.GetComponent<TMPro.TextMeshProUGUI>();
-		textmesh.SetText("Player " + playerID + " : ");
-
-		// affichage des vies
-		float gap = 15f;
-
-		// Pour le joueur 2 on met les coeurs de droite à gauche et inversement pour le joueur 1
-		float sens = Mathf.Pow(-1, (int)playerID);
-
-		float nextXPosition = textmesh.rectTransform.anchoredPosition.x + sens * (textmesh.rectTransform.rect.width / 2 - gap);
-		float yPosition = textmesh.rectTransform.anchoredPosition.y - (textmesh.rectTransform.rect.height);
-
-		RectTransform rt = (RectTransform)heartPrefab.transform;
-
-		for (int i = 0; i < lives; i++)
-		{
-			GameObject heart = Instantiate(heartPrefab, new Vector3(nextXPosition, yPosition, 0), Quaternion.identity) as GameObject;
-			heart.transform.SetParent(GameObject.FindGameObjectWithTag("canvas").transform, false);
-			heart.tag = "heartsPlayer" + playerID;
-			nextXPosition = nextXPosition - sens * (rt.rect.width - gap);
-		}
-
-
 	}
 
     private void Update()
@@ -95,7 +72,7 @@ public class PlayerController : MonoBehaviour
         if (animator.GetBool("punching"))
         {
 
-            if (punchingFrame == 30)
+            if (punchingFrame == 15)
             {
                 animator.SetBool("punching", false);
                 punchingFrame = -1;
@@ -131,41 +108,18 @@ public class PlayerController : MonoBehaviour
 		{
 			float dir = ratio * Input.GetAxis("Horizontal" + playerID) * acceleration * Time.deltaTime;
 
-			if (dir > 0.0f)
-			{
-				model.transform.eulerAngles = new Vector3(
+			model.transform.eulerAngles = new Vector3(
 					model.transform.eulerAngles.x,
-					-70,
+                    Input.GetAxis("Horizontal" + playerID) * -60,
 					model.transform.eulerAngles.z
 				);
-			}
-			else if (dir < 0.0f)
-			{
-				model.transform.eulerAngles = new Vector3(
-					model.transform.eulerAngles.x,
-					+70,
-					model.transform.eulerAngles.z
-				);
-			}
-			else
-			{
-				model.transform.eulerAngles = new Vector3(
-					model.transform.eulerAngles.x,
-					0,
-					model.transform.eulerAngles.z
-				);
-			}
-
+			
 			rb.AddForce(new Vector2(dir, 0));
 		}
 		//freine le joueur si on relache la direction
-		if ((Mathf.Abs(Input.GetAxis("Horizontal" + playerID)) < 0.4f || punched ))
+		if (Mathf.Abs(Input.GetAxis("Horizontal" + playerID)) < 0.4f || punched)
 		{
 			rb.AddForce(new Vector2(-rb.velocity.x * 10, 0));
-		}
-		if ((punched))
-		{
-			rb.AddForce(new Vector2(0, -rb.velocity.y * 70));
 		}
 	}
 
@@ -196,10 +150,10 @@ public class PlayerController : MonoBehaviour
 			otherPlayerController.setPunched(true);
 
 			// force du coup ne dépendant pas de la vitesse
-			float punchForce = 25f;
+			float punchForce = 15f;
 
 			// 13 est un coefficient permettant d'accentuer l'importance de la vélocité dans le calcul de la force du coup
-			float playerVel = Mathf.Abs(rb.velocity.x) * 13;
+			float playerVel = Mathf.Abs(rb.velocity.x) * 5;
 
 
 			// On calcule où se situe le joueur par rapport à l'autre
@@ -209,17 +163,14 @@ public class PlayerController : MonoBehaviour
 			float xDirection;
 			// l'autre joueur est à droite du joueur
 			if (playersPositionDiff > 0)
-			{
 				xDirection = -1;
-			}
-
 			else if (playersPositionDiff < 0)
 				xDirection = 1;
 			else
 				xDirection = 0;
 
 			//Vector3 movement = new Vector3(xDirection, 0.0f, 0);
-			otherPlayerController.rb.AddForce(new Vector3(xDirection * (playerVel + punchForce), (playerVel + punchForce), 0f),ForceMode2D.Impulse);
+			otherPlayerController.rb.AddForce(new Vector2(xDirection * (playerVel + punchForce), (playerVel + punchForce) * 0.1f),ForceMode2D.Impulse);
 
 		}
 	}
@@ -232,17 +183,20 @@ public class PlayerController : MonoBehaviour
 		}
 		// Sortie de la zone : elle est représentée par un rectangle comprenant toute la zone.
 		// La sortie du trigger correspond à une sortie de la zone.
-		if (coll.gameObject.tag == "zone")
+		if (coll.CompareTag("Zone") && lastExitTime + 1 < Time.time)
         {
+            lastExitTime = Time.time;
             Debug.Log(gameObject.name + " est sorti de la zone");
-            transform.position = new Vector3(0, 0, 0);
+            transform.position = new Vector3(0, 2, 0);
 			rb.velocity = new Vector3(0, 0, 0);
 			lives = lives>0 ? lives-1 : lives;
-			DisplayPLayersLives();
+            GameManager.instance.UpdateHearts(playerID, lives);
 
 
-			if (lives==0) {
+            if (lives==0)
+            {
                 GameMaster.KillPlayer(this);
+                
                 Destroy(gameObject);
             }
         }
@@ -256,37 +210,5 @@ public class PlayerController : MonoBehaviour
 	public void setPunched(bool punched)
 	{
 		this.punched = punched;
-	}
-
-	private void DisplayPLayersLives()
-	{
-
-		TMPro.TextMeshProUGUI textmesh = textMeshPro.GetComponent<TMPro.TextMeshProUGUI>();
-
-		// Destroy all instances of heartPrefab
-		var hearts = GameObject.FindGameObjectsWithTag("heartsPlayer"+playerID);
-
-		foreach (GameObject heart in hearts)
-		{
-			Destroy(heart);
-		}
-		// affichage des vies
-		float gap = 15f;
-
-		// Pour le joueur 2 on met les coeurs de droite à gauche et inversement pour le joueur 1
-		float sens = Mathf.Pow(-1, (int)playerID);
-
-		float nextXPosition = textmesh.rectTransform.anchoredPosition.x + sens * (textmesh.rectTransform.rect.width / 2 - gap);
-		float yPosition = textmesh.rectTransform.anchoredPosition.y - (textmesh.rectTransform.rect.height);
-
-		RectTransform rt = (RectTransform)heartPrefab.transform;
-
-		for (int i = 0; i < lives; i++)
-		{
-			GameObject heart = Instantiate(heartPrefab, new Vector3(nextXPosition, yPosition, 0), Quaternion.identity) as GameObject;
-			heart.transform.SetParent(GameObject.FindGameObjectWithTag("canvas").transform, false);
-			heart.tag = "heartsPlayer" + playerID;
-			nextXPosition = nextXPosition - sens * (rt.rect.width - gap);
-		}
 	}
 }
