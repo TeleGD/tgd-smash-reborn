@@ -171,8 +171,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D coll)
     {
-        Component oCall = coll.otherCollider;
-        if ((coll.gameObject.tag == "Floor" || coll.gameObject.tag == "Player") && oCall == compt)
+        if (coll.contacts[0].point.y < transform.position.y + 0.1f)
         {
             nbJumps = nbJumpsMax;
         }
