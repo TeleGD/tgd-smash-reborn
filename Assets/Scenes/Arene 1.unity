@@ -1413,11 +1413,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player 1
       objectReference: {fileID: 0}
-    - target: {fileID: 8387565537677962831, guid: 4b79ac1e81b5faf44a47e71b536bbc90,
-        type: 3}
-      propertyPath: m_TagString
-      value: Untagged
-      objectReference: {fileID: 0}
     - target: {fileID: 6922186836431289820, guid: 4b79ac1e81b5faf44a47e71b536bbc90,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1482,16 +1477,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 9199024032093624742, guid: 38ee72bc792a09b458c0b60b2c3d0660,
         type: 3}
-    - target: {fileID: 1712897944, guid: 4b79ac1e81b5faf44a47e71b536bbc90, type: 3}
-      propertyPath: heartPrefab
-      value: 
-      objectReference: {fileID: 9199024032093624742, guid: 38ee72bc792a09b458c0b60b2c3d0660,
-        type: 3}
-    - target: {fileID: 6812386801741893691, guid: 4b79ac1e81b5faf44a47e71b536bbc90,
-        type: 3}
-      propertyPath: m_IsTrigger
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3926606097072611500, guid: 4b79ac1e81b5faf44a47e71b536bbc90,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
