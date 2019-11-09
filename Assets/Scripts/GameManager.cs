@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
 
     private void DisplayPLayersLives()
     {
-        int positionOffset = 30;
+        int positionOffset = 75;
         for(int p = 1; p <= 2; p++)
         {
             Transform heart = transform.Find("Canvas/P" + p).GetChild(1);
