@@ -15,7 +15,7 @@ Les jeux suivants ne disposent plus d'aucun support connu :
 Smash Reborn est un jeu de plateforme dans lequel deux joueurs s'affrontent. Le joueur gagnant est celui réussissant à expulser l'autre joueur de la plateforme le plus grand nombre de fois.
 
 ## Installation
-Pour installer le jeu il faut cloner le dépôt ([comment cloner un dépot?]https://docs.gitlab.com/ee/university/training/topics/getting_started.html#instantiate-workflow-with-clone) ), puis executer le fichier tgd-smash-reborn.exe présent dans le dossier Build
+Pour installer le jeu il faut cloner le dépôt ([comment cloner un dépot?](https://docs.gitlab.com/ee/university/training/topics/getting_started.html#instantiate-workflow-with-clone) ), puis executer le fichier tgd-smash-reborn.exe présent dans le dossier Build
 
 ## Commandes
 **Joueur 1**
