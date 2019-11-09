@@ -112,7 +112,7 @@ public class PlayerController : MonoBehaviour
 					model.transform.eulerAngles.x,
                     Input.GetAxis("Horizontal" + playerID) * -60,
 					model.transform.eulerAngles.z
-				);
+			);
 			
 			rb.AddForce(new Vector2(dir, 0));
 		}
