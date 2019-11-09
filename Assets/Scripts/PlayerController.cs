@@ -25,6 +25,11 @@ public class PlayerController : MonoBehaviour
     private Animator animator;
     public GameObject model; //c'est le GameObject "Model" du perso
 	private int beeingPunchFrame = 0;
+
+	//Liste des plateformes avec lesquels le joueur est en collision
+	List<Collider2D> collidingPlateforms = new List<Collider2D>();
+	// Est ce que le joueur descend d'une plateforme
+	bool isDescending;
     
 	private int lives; //nombre de coeurs
 
@@ -42,6 +47,7 @@ public class PlayerController : MonoBehaviour
         animator = model.GetComponent<Animator>();
         lives = 5;
         ToggleAttackTriggers(false);
+		isDescending = false;
 	}
 
     private void Update()
@@ -52,6 +58,18 @@ public class PlayerController : MonoBehaviour
 		{
 			rb.velocity = new Vector2(rb.velocity.x, jumpForce);
 			nbJumps -= 1;
+		}
+
+		// Pour descendre
+		// On aurait pu bind une touche pour le Jump negatif mais c'est moins propre
+		if (Input.GetButtonDown("Descend" + playerID))
+		{
+			//Si on est sur une plateforme
+			if (!(collidingPlateforms == null || collidingPlateforms.Count == 0))
+			{
+				isDescending = true;
+				Descend();
+			}
 		}
 
 		// Si le bouton d'attaque est pressé
@@ -107,18 +125,52 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D coll)
     {
-        if (coll.contacts[0].point.y < transform.position.y + 0.1f)
+		// Si on est au dessus d'une plateforme
+		if (coll.contacts[0].point.y < transform.position.y + 0.1f)
         {
             nbJumps = nbJumpsMax;
-        }
-    }
 
-    private void OnTriggerEnter2D(Collider2D coll)
+			Collider2D collider = coll.gameObject.GetComponent<Collider2D>();
+			collidingPlateforms.Add(collider);
+			// Si on est sur une plateforme qui n'est pas le sol et qu'on descend
+			if (collider.GetType() == typeof(EdgeCollider2D) && isDescending)
+			{
+				// On descend
+				Descend();
+			}
+        }
+		
+    }
+	private void OnCollisionExit2D(Collision2D coll)
+	{
+		Collider2D collider = coll.gameObject.GetComponent<Collider2D>();
+
+		// Si on était en contact avec cette plateforme
+		if (collidingPlateforms.Contains(collider))
+			StartCoroutine(cognizeCollision(collider));
+		//Si on est en l'air on ne peut pas descendre d'une plateforme
+		if (collidingPlateforms.Count == 0)
+			isDescending = false;
+	}
+
+	// Coroutine rétablissant la collision avec une plateforme
+	// On utilise ici une coroutine car sinon lorsqu'on ignore une plateforme, OnCollisionExit2D est appelé et on ne
+	// laisse pas le temps au joueur de tomber
+	private IEnumerator cognizeCollision(Collider2D collider)
+	{
+		collidingPlateforms.Remove(collider);
+		//On laisse 1 seconde au joueur pour tomber de la plateforme
+		yield return new WaitForSeconds(1f);
+		// On rétablit la collision
+		Physics2D.IgnoreCollision(collider, GetComponent<Collider2D>(), false);
+	}
+
+	private void OnTriggerEnter2D(Collider2D coll)
 	{
         // Si le collider est un collider d'attaque (le bras de l'adversaire)
         if (coll.CompareTag("Attack"))
             PlayerHit(Mathf.Sign(transform.position.x - coll.transform.parent.position.x));
-    }
+	}
 
 	// Notre joueur vient de se faire taper
 	private void PlayerHit(float xDir)
@@ -135,6 +187,16 @@ public class PlayerController : MonoBehaviour
 		float playerVel = Mathf.Abs(rb.velocity.x) * 10;
 
 		rb.AddForce(new Vector2(xDir * (playerVel + punchForce), (playerVel + punchForce) * 0.1f),ForceMode2D.Impulse);
+	}
+
+	// Méthode permettant de descendre de la plateforme sur laquelle on se trouve
+	private void Descend()
+	{
+		// Si on est bien sur une plateforme
+		if (collidingPlateforms.Count > 0)
+		{
+			Physics2D.IgnoreCollision(collidingPlateforms[collidingPlateforms.Count -1], GetComponent<Collider2D>());
+		}
 	}
 
     private void KillPlayer()
