@@ -207,6 +207,8 @@ public class PlayerController : MonoBehaviour
             Debug.Log(gameObject.name + " est sorti de la zone");
             transform.position = new Vector3(0, 2, 0);
 			rb.velocity = new Vector3(0, 0, 0);
+			//On évite que le joueur ne spawn sur un autre
+			StartCoroutine(descendPlayer());
 			lives--;
             GameManager.instance.UpdateHearts(playerID, lives);
 
@@ -217,11 +219,16 @@ public class PlayerController : MonoBehaviour
                 Destroy(gameObject);
             }
         }
-
     }
+	//Coroutine permettant de descendre le joueur après un certain temps d'attente
+	private IEnumerator descendPlayer()
+	{
+		yield return new WaitForSeconds(0.075f);
+		Descend();
+	}
 
-    //Coroutine a lancer pour l'attaque du joueur
-    private IEnumerator Attack()
+	//Coroutine a lancer pour l'attaque du joueur
+	private IEnumerator Attack()
     {
         isPunching = true;
         animator.SetBool("punching", true);
