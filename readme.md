@@ -19,20 +19,20 @@ Pour installer le jeu il faut cloner le dépôt ([comment cloner un dépot?]http
 
 ## Commandes
 **Joueur 1**
--Droite: q
--Gauche: d
--Sauter: space
--Descendre: s
--Sprint: left-shift
--Attaquer: r
+- Droite: q
+- Gauche: d
+- Sauter: space
+- Descendre: s
+- Sprint: left-shift
+- Attaquer: r
 
 **Joueur 2**
--Droite: left-arrow 
--Gauche: right-arrow
--Sauter: up-arrow
--Descendre: down-arrow
--Sprint: right-shift
--Attaquer: m
+- Droite: left-arrow 
+- Gauche: right-arrow
+- Sauter: up-arrow
+- Descendre: down-arrow
+- Sprint: right-shift
+- Attaquer: m
 
 Le jeu est aussi jouable via console.
 
