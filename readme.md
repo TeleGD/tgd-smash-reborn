@@ -18,21 +18,21 @@ Smash Reborn est un jeu de plateforme dans lequel deux joueurs s'affrontent. Le 
 Pour installer le jeu il faut cloner le dépôt ([comment cloner un dépot?]https://docs.gitlab.com/ee/university/training/topics/getting_started.html#instantiate-workflow-with-clone) ), puis executer le fichier tgd-smash-reborn.exe présent dans le dossier Build
 
 ## Commandes
-* *Joueur 1*
-- Droite: q
-- Gauche: d
-- Sauter: space
-- Descendre: s
-- Sprint: left-shift
-- Attaquer: r
+**Joueur 1**
+-Droite: q
+-Gauche: d
+-Sauter: space
+-Descendre: s
+-Sprint: left-shift
+-Attaquer: r
 
-* *Joueur 2*
-- Droite: left-arrow 
-- Gauche: right-arrow
-- Sauter: up-arrow
-- Descendre: down-arrow
-- Sprint: right-shift
-- Attaquer: m
+**Joueur 2**
+-Droite: left-arrow 
+-Gauche: right-arrow
+-Sauter: up-arrow
+-Descendre: down-arrow
+-Sprint: right-shift
+-Attaquer: m
 
 Le jeu est aussi jouable via console.
 
